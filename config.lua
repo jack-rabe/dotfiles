@@ -6,7 +6,6 @@
 
 --[[
 lvim is the global options object
-
 Linters should be
 filled in as strings with either
 a global executable or a path to
@@ -31,11 +30,12 @@ lvim.keys.normal_mode["<leader>y"] = ':let @+ = expand("%")<cr>)'
 -- Harpoon
 lvim.keys.normal_mode["m"] = ":lua require('harpoon.mark').add_file()<cr>"
 lvim.keys.normal_mode["''"] = ":lua require('harpoon.ui').toggle_quick_menu()<cr>"
-lvim.keys.normal_mode["'f"] = ":lua require('harpoon.ui').nav_next()<cr>"
-lvim.keys.normal_mode["'b"] = ":lua require('harpoon.ui').nav_prev()<cr>"
+lvim.keys.normal_mode["'n"] = ":lua require('harpoon.ui').nav_next()<cr>"
+lvim.keys.normal_mode["'p"] = ":lua require('harpoon.ui').nav_prev()<cr>"
 lvim.keys.normal_mode["'a"] = ":lua require('harpoon.ui').nav_file(1)<cr>"
 lvim.keys.normal_mode["'s"] = ":lua require('harpoon.ui').nav_file(2)<cr>"
 lvim.keys.normal_mode["'d"] = ":lua require('harpoon.ui').nav_file(3)<cr>"
+lvim.keys.normal_mode["'f"] = ":lua require('harpoon.ui').nav_file(3)<cr>"
 
 -- Telescope
 lvim.lsp.buffer_mappings.normal_mode["gr"] = nil
@@ -43,6 +43,7 @@ lvim.keys.normal_mode["gr"] = ":Tel lsp_references<cr>"
 lvim.keys.normal_mode["<leader>?"] = ":Tel keymaps<cr>"
 lvim.keys.normal_mode["<leader>*"] = ":Tel grep_string<cr>"
 lvim.keys.normal_mode["<leader>r"] = ":Tel command_history<cr>"
+
 
 -- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
 -- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
@@ -197,15 +198,49 @@ lvim.plugins = {
     'haishanh/night-owl.vim',
     'ggandor/leap.nvim',
     'ThePrimeagen/harpoon',
-    -- "github/copilot.vim",
+    -- {
+    --   'folke/noice.nvim',
+    --   dependencies = {
+    --     "MunifTanjim/nui.nvim",
+    --     "rcarriga/nvim-notify",
+    --   },
+    --   config = function()
+    --     require('noice').setup({
+    --       lsp = {
+    --         -- override markdown rendering so that cmp and other plugins use Treesitter
+    --         override = {
+    --           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+    --           ["vim.lsp.util.stylize_markdown"] = true,
+    --           ["cmp.entry.get_documentation"] = true,
+    --         },
+    --         hover = { enabled = false },
+    --         signature = { enabled = false }
+    --       },
+    --       -- you can enable a preset for easier configuration
+    --       presets = {
+    --         bottom_search = true,         -- use a classic bottom cmdline for search
+    --         long_message_to_split = true, -- long messages will be sent to a split
+    --       },
+    --     })
+    --   end,
+
+    --   -- "github/copilot.vim",
+    --   --   {
+    --   --     "leoluz/nvim-dap-go",
+    --   --     config = function()
+    --   --       require('dap-go').setup()
+    --   --     end,
+    --   --   },
+    -- }
   },
 }
+
 
 require("leap").add_default_mappings()
 
 require("harpoon").setup({
   menu = {
-    width = vim.api.nvim_win_get_width(0) - 20,
+    width = vim.api.nvim_win_get_width(0) - 50,
   }
 })
 
@@ -226,3 +261,20 @@ lvim.builtin.project.patterns = { ">Projects", ".git" }
 --     require("nvim-treesitter.highlight").attach(0, "bash")
 --   end,
 -- })
+--
+--
+local dap = require('dap')
+dap.configurations.elixir = {
+  {
+    type = 'elixir',
+    request = 'launch',
+    name = "Launch file",
+  },
+}
+dap.adapters.elixir = {
+  type = "executable",
+  command = '/Users/jrabe/.local/share/lvim/mason/bin/elixir-ls-debugger',
+  args = {}
+
+
+}
