@@ -1,0 +1,13 @@
+[font]
+size = 13
+
+  [font.normal]
+  family = "Hack Nerd Font"
+
+[window]
+  option_as_alt = "Both"
+
+[shell]
+program = "/opt/homebrew/bin/fish"
+args = [ "--login" ]
+
