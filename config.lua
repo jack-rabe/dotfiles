@@ -15,7 +15,7 @@ an executable
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save.enabled = true
-lvim.colorscheme = "lunar"
+lvim.colorscheme = "nightfly"
 vim.opt.relativenumber = true
 vim.opt.timeoutlen = 200
 -- to disable icons and use a minimalist setup, uncomment the following
@@ -24,8 +24,10 @@ vim.opt.timeoutlen = 200
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
 
-lvim.keys.normal_mode["ga"] = ":e#<cr>"
+lvim.keys.normal_mode["ga"] = "<C-^>"
 lvim.keys.normal_mode["<leader>o"] = "<C-w>o"
+lvim.keys.normal_mode["<C-d>"] = "<C-d>zz"
+lvim.keys.normal_mode["<C-u>"] = "<C-u>zz"
 lvim.keys.normal_mode["<leader>y"] = ':let @+ = expand("%")<cr>)'
 -- Harpoon
 lvim.keys.normal_mode["m"] = ":lua require('harpoon.mark').add_file()<cr>"
@@ -194,7 +196,8 @@ lvim.plugins = {
   {
     'tpope/vim-surround',
     'tpope/vim-repeat',
-    'morhetz/gruvbox',
+    -- 'morhetz/gruvbox',
+    'bluz71/vim-nightfly-colors',
     'haishanh/night-owl.vim',
     'ggandor/leap.nvim',
     'ThePrimeagen/harpoon',
@@ -247,7 +250,6 @@ require("harpoon").setup({
 -- fix cwd changing automatically
 lvim.builtin.project.patterns = { ">Projects", ".git" }
 
-
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- vim.api.nvim_create_autocmd("BufEnter", {
 --   pattern = { "*.json", "*.jsonc" },
@@ -263,18 +265,17 @@ lvim.builtin.project.patterns = { ">Projects", ".git" }
 -- })
 --
 --
-local dap = require('dap')
-dap.configurations.elixir = {
-  {
-    type = 'elixir',
-    request = 'launch',
-    name = "Launch file",
-  },
-}
-dap.adapters.elixir = {
-  type = "executable",
-  command = '/Users/jrabe/.local/share/lvim/mason/bin/elixir-ls-debugger',
-  args = {}
-
-
-}
+--
+-- local dap = require('dap')
+-- dap.configurations.elixir = {
+--   {
+--     type = 'elixir',
+--     request = 'launch',
+--     name = "Launch file",
+--   },
+-- }
+-- dap.adapters.elixir = {
+--   type = "executable",
+--   command = '/Users/jrabe/.local/share/lvim/mason/bin/elixir-ls-debugger',
+--   args = {}
+-- }

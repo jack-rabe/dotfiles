@@ -14,6 +14,6 @@ if status is-interactive
     set -Ux EDITOR lvim
 
     # fzf keybindings
-    fzf_configure_bindings --processes=\cq  --directory=\cp
+    fzf_configure_bindings --processes=\co  --directory=\cp --git_log=\cu
 
 end
