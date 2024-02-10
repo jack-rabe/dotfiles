@@ -1,23 +1,10 @@
--- Read the docs: https://www.lunarvim.org/docs/configuration
--- Video Tutorials: https://www.youtube.com/watch?v=sFA9kX-Ud_c&list=PLhoH5vyxr6QqGu0i7tt_XoVK9v-KvZ3m6
--- Forum: https://www.reddit.com/r/lunarvim/
--- Discord: https://discord.com/invite/Xb9B4Ny
---
-
---[[
-lvim is the global options object
-Linters should be
-filled in as strings with either
-a global executable or a path to
-an executable
-]]
-
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save.enabled = true
 lvim.colorscheme = "nightfly"
 vim.opt.relativenumber = true
 vim.opt.timeoutlen = 200
+-- vim.opt.cmdheight = 1
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -37,25 +24,18 @@ lvim.keys.normal_mode["'p"] = ":lua require('harpoon.ui').nav_prev()<cr>"
 lvim.keys.normal_mode["'a"] = ":lua require('harpoon.ui').nav_file(1)<cr>"
 lvim.keys.normal_mode["'s"] = ":lua require('harpoon.ui').nav_file(2)<cr>"
 lvim.keys.normal_mode["'d"] = ":lua require('harpoon.ui').nav_file(3)<cr>"
-lvim.keys.normal_mode["'f"] = ":lua require('harpoon.ui').nav_file(3)<cr>"
+lvim.keys.normal_mode["'f"] = ":lua require('harpoon.ui').nav_file(4)<cr>"
 
 -- Telescope
 lvim.lsp.buffer_mappings.normal_mode["gr"] = nil
 lvim.keys.normal_mode["gr"] = ":Tel lsp_references<cr>"
+
+lvim.keys.normal_mode["<leader>a"] = ":Tel git_files<cr>"
 lvim.keys.normal_mode["<leader>?"] = ":Tel keymaps<cr>"
 lvim.keys.normal_mode["<leader>*"] = ":Tel grep_string<cr>"
 lvim.keys.normal_mode["<leader>r"] = ":Tel command_history<cr>"
 
 
--- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
--- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
--- unmap a default keymapping
--- vim.keymap.del("n", "<C-Up>")
--- override a default keymapping
--- lvim.keys.normal_mode["<C-q>"] = ":q<cr>" -- or vim.keymap.set("n", "<C-q>", ":q<cr>" )
-
--- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
--- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
 local _, actions = pcall(require, "telescope.actions")
 lvim.builtin.telescope.defaults.mappings = {
   -- for input mode
@@ -72,21 +52,6 @@ lvim.builtin.telescope.defaults.mappings = {
   },
 }
 
--- Change theme settings
--- lvim.builtin.theme.options.dim_inactive = true
--- lvim.builtin.theme.options.style = "storm"
-
--- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
--- lvim.builtin.which_key.mappings["t"] = {
---   name = "+Trouble",
---   r = { "<cmd>Trouble lsp_references<cr>", "References" },
---   f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
---   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
---   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
---   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
---   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
--- }
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
@@ -112,7 +77,6 @@ lvim.builtin.treesitter.ensure_installed = {
   "yaml",
 }
 
-lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enable = true
 
 -- generic LSP settings
@@ -159,8 +123,7 @@ lvim.builtin.treesitter.highlight.enable = true
 -- -- set a formatter, this will override the language server formatting capabilities (if it exists)
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
-  --   { command = "black", filetypes = { "python" } },
-  --   { command = "isort", filetypes = { "python" } },
+  { command = "black", filetypes = { "python" } },
   {
     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
     command = "prettier",
@@ -175,20 +138,10 @@ formatters.setup {
 -- -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-  { command = "eslint", filetypes = { "javascript", "typescript", "typescriptreact" } }
-  --   { command = "flake8", filetypes = { "python" } },
-  --   {
-  --     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
-  --     command = "shellcheck",
-  --     ---@usage arguments to pass to the formatter
-  --     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
-  --     extra_args = { "--severity", "warning" },
-  --   },
-  --   {
-  --     command = "codespell",
-  --     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
-  --     filetypes = { "javascript", "python" },
-  --   },
+  { command = "eslint", filetypes = { "javascript", "typescript", "typescriptreact" } },
+  -- { command = "golangci-lint", extra_args = { "--fast" },                                    filetypes = { "go" } }
+  -- { command = "flake8", filetypes = { "python" } },
+  -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
 }
 
 -- Additional Plugins
@@ -196,38 +149,22 @@ lvim.plugins = {
   {
     'tpope/vim-surround',
     'tpope/vim-repeat',
-    -- 'morhetz/gruvbox',
     'bluz71/vim-nightfly-colors',
-    'haishanh/night-owl.vim',
     'ggandor/leap.nvim',
     'ThePrimeagen/harpoon',
-    -- {
-    --   'folke/noice.nvim',
-    --   dependencies = {
-    --     "MunifTanjim/nui.nvim",
-    --     "rcarriga/nvim-notify",
-    --   },
-    --   config = function()
-    --     require('noice').setup({
-    --       lsp = {
-    --         -- override markdown rendering so that cmp and other plugins use Treesitter
-    --         override = {
-    --           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-    --           ["vim.lsp.util.stylize_markdown"] = true,
-    --           ["cmp.entry.get_documentation"] = true,
-    --         },
-    --         hover = { enabled = false },
-    --         signature = { enabled = false }
-    --       },
-    --       -- you can enable a preset for easier configuration
-    --       presets = {
-    --         bottom_search = true,         -- use a classic bottom cmdline for search
-    --         long_message_to_split = true, -- long messages will be sent to a split
-    --       },
-    --     })
-    --   end,
-
-    --   -- "github/copilot.vim",
+    -- https://medium.com/aimonks/a-guide-to-integrating-lunarvim-github-copilot-61d92f764913
+    {
+      "zbirenbaum/copilot.lua",
+      cmd = "Copilot",
+      event = "InsertEnter",
+    },
+    {
+      "zbirenbaum/copilot-cmp",
+      after = { "copilot.lua" },
+      config = function()
+        require("copilot_cmp").setup()
+      end,
+    },
     --   --   {
     --   --     "leoluz/nvim-dap-go",
     --   --     config = function()
@@ -238,33 +175,36 @@ lvim.plugins = {
   },
 }
 
+local ok, copilot = pcall(require, "copilot")
+if not ok then
+  return
+end
+
+copilot.setup {
+  suggestion = {
+    keymap = {
+      accept = "<c-l>",
+      next = "<c-j>",
+      prev = "<c-k>",
+      dismiss = "<c-h>",
+    },
+  },
+}
+
+local opts = { noremap = true, silent = true }
+vim.api.nvim_set_keymap("n", "<c-s>", "<cmd>lua require('copilot.suggestion').toggle_auto_trigger()<CR>", opts)
 
 require("leap").add_default_mappings()
 
 require("harpoon").setup({
   menu = {
-    width = vim.api.nvim_win_get_width(0) - 50,
+    width = vim.api.nvim_win_get_width(0) / 2,
   }
 })
 
 -- fix cwd changing automatically
 lvim.builtin.project.patterns = { ">Projects", ".git" }
 
--- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- vim.api.nvim_create_autocmd("BufEnter", {
---   pattern = { "*.json", "*.jsonc" },
---   -- enable wrap mode for json files only
---   command = "setlocal wrap",
--- })
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "zsh",
---   callback = function()
---     -- let treesitter use bash highlight for zsh files as well
---     require("nvim-treesitter.highlight").attach(0, "bash")
---   end,
--- })
---
---
 --
 -- local dap = require('dap')
 -- dap.configurations.elixir = {
