@@ -4,10 +4,6 @@ meh - k : yabai -m window --focus north
 meh - h : yabai -m window --focus west
 meh - l : yabai -m window --focus east
 
-# change focus between external displays (left and right)
-hyper - 0x1E: yabai -m display --focus west
-hyper - 0x21: yabai -m display --focus east
-
 # rotate layout clockwise
 meh - r : yabai -m space --rotate 270
 
@@ -32,8 +28,12 @@ hyper - h : yabai -m window --swap west
 hyper - l : yabai -m window --swap east
 
 # move window to display left and right
-meh - 0x1E: yabai -m window --display west; yabai -m display --focus west;
-meh - 0x21: yabai -m window --display east; yabai -m display --focus east;
+hyper - 0x1E: yabai -m window --display west; yabai -m display --focus west;
+hyper - 0x21: yabai -m window --display east; yabai -m display --focus east;
+
+# change focus between external displays (left and right)
+meh - 0x1E: yabai -m display --focus west
+meh - 0x21: yabai -m display --focus east
 
 # move window to prev and next space
 meh - p : yabai -m window --space prev;
